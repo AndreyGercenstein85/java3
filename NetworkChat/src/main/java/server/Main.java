@@ -3,6 +3,7 @@ package server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.Vector;
 
 class Main {
@@ -88,6 +89,13 @@ class Main {
 
         for (ClientHandler o : clients) {
             o.sendMsg(out);
+        }
+    }
+    public void changeNikname(ClientHandler clientHandler, String oldNick, String newNick) throws SQLException {
+        for (ClientHandler o : clients){
+            if (AuthService.getIdByNick(newNick) == 0) {
+                AuthService.changeNickname(oldNick,newNick);
+            }
         }
     }
 }

@@ -19,10 +19,14 @@ public class AuthService {
     public static void setNewUsers(String login, String pass, String nick) {
         connection();
         int hash = pass.hashCode();
-        String sql = String.format("INSERT INTO users (login, password, nickname) VALUES ('%s', '%d', '%s')", login, hash, nick);
+        String sql = "INSERT INTO users (login, password, nickname) Values (?, ?, ?)";
 
         try {
-            boolean rs = stmt.execute(sql);
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, login);
+            pstmt.setInt(2, hash);
+            pstmt.setString(3, nick);
+            pstmt.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -33,7 +37,7 @@ public class AuthService {
 
 
     static int getIdByNick(String _nick) {
-        String idNick = String.format("SELECT id FROM users where nickname = '%s'", _nick);
+        String idNick = String.format("SELECT count(id) FROM users where nickname = '%s'", _nick);
         try {
             ResultSet rs = stmt.executeQuery(idNick);
 
@@ -65,6 +69,26 @@ public class AuthService {
 
         return null;
     }
+
+        public static void changeNickname(String oldNick, String newNick) throws SQLException {
+        connection();
+
+        String sql = "UPDATE users " +
+                "  SET nickname = ? " +
+                "WHERE nickname = ?";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        try {
+            pstmt.setString(1, newNick);
+            pstmt.setString(2, oldNick);
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            disconnect();
+        }
+    }
+
 
     static void disconnect() {
         try {

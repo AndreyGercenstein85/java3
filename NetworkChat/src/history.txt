@@ -1,10 +1,2 @@
-andrey3: привет
-andrey3: привет
-andrey3: привет
-andrey: привет
-th andrey3 1508416
-andrey: привет
-andrey3: привет
-andrey3: привет
-andrey3: привет
-andrey: привет
+/auth andrey1 1508416
+/auth andrey2 1508416

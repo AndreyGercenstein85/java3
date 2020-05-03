@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.SQLException;
 
 class ClientHandler {
 
@@ -61,11 +62,16 @@ class ClientHandler {
                                     server.sendPersonalMsg(ClientHandler.this, tokens[1], tokens[2]);
                                 }
 
+                                if (str.startsWith("/change ")) {
+                                    String[] tokens = str.split(" ", 3);
+                                    server.changeNikname(ClientHandler.this, tokens[1], tokens[2]);
+                                }
+
                             } else {
                                 server.broadcastMsg(ClientHandler.this,nick + ": " + str);
                             }
                         }
-                    } catch (IOException e) {
+                    } catch (IOException | SQLException e) {
                         e.printStackTrace();
                     } finally {
                         try {
