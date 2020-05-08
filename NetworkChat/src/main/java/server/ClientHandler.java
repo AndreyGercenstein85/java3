@@ -5,6 +5,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 
 class ClientHandler {
 
@@ -14,20 +17,22 @@ class ClientHandler {
     private Main server;
     private String nick;
 
+
+
     String getNick() {
         return nick;
     }
 
-    ClientHandler(Socket socket, Main server) {
+    public ClientHandler(Socket socket, Main server) {
         try {
             this.socket = socket;
             this.server = server;
             this.in = new DataInputStream(socket.getInputStream());
             this.out = new DataOutputStream(socket.getOutputStream());
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
+            //new Thread(new Runnable()
+            this.server.getExecutorService().execute(()->
+            {
                     try {
                         while (true) {
                             String str = in.readUTF();
@@ -92,11 +97,12 @@ class ClientHandler {
                     }
                     server.unsubscribe(ClientHandler.this);
                 }
-            }).start();
+            );
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     void sendMsg(String msg) {
@@ -106,4 +112,6 @@ class ClientHandler {
             e.printStackTrace();
         }
     }
+
+
 }

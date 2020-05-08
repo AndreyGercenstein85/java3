@@ -5,9 +5,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.Vector;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 class Main {
     private Vector<ClientHandler> clients;
+    private ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     Main() {
         clients = new Vector<>();
@@ -39,6 +42,7 @@ class Main {
                 e.printStackTrace();
             }
             AuthService.disconnect();
+            executorService.shutdown();
         }
     }
 
@@ -97,5 +101,8 @@ class Main {
                 AuthService.changeNickname(oldNick,newNick);
             }
         }
+    }
+    public ExecutorService getExecutorService() {
+        return executorService;
     }
 }
