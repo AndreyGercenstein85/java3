@@ -40,6 +40,7 @@ public class Main {
         Orange orange1 = new Orange(Orange.WEIGHT);
         Orange orange2 = new Orange(Orange.WEIGHT);
 
+
         Box<Apple> box1 = new Box<>(apple1, apple2);
         Box<Orange> box2 = new Box<>(orange1, orange2);
 
